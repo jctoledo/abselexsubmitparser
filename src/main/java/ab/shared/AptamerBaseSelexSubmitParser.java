@@ -48,6 +48,7 @@ public class AptamerBaseSelexSubmitParser {
 	 */
 	private static final long serialVersionUID = 2415871140688842740L;
 
+	private File jsonFile = null;
 
 	/**
 	 * A map where the key is the form page number and the value is the JSON for
@@ -350,7 +351,7 @@ public class AptamerBaseSelexSubmitParser {
 								buffAgentNames, ph, metalCationConcs, temp);
 						affList.add(ae);
 					}// for affinityExperiments
-						// create an Interaction object
+					// create an Interaction object
 					Interaction anInteraction = new Interaction(affList,
 							aptaList, at);
 					rm.add(anInteraction);

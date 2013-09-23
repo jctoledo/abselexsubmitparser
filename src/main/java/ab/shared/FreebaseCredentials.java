@@ -18,41 +18,62 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ab.shared.lib;
+package ab.shared;
 
+import java.io.IOException;
+import java.io.InputStream;
 
-import ab.shared.URLReader;
+import org.apache.commons.io.IOUtils;
 
-import com.freebase.json.JSON;
 
 /**
  * @author  Jose Cruz-Toledo
  *
  */
-public class FreebaseHelper {
-	private static final String key = "AIzaSyB8ouPZ2w1rkMS3bGL6PVNJm6AHLTKFhC4";
-	private static final String scheme = "https";
-	private static final String host = "www.googleapis.com";
-	private static final String path = "/freebase/v1/mqlread";
-
-	/**
-	 * Retrieve the MID of a given topic given a name and its type. For example passing in "Generic SELEX" and "/base/aptamer/selex_method" will return /m/0clfqg4
-	 * @param aTopicName the name of a topic
-	 * @param aTopicType the type of the topic
-	 * @return the mid of the topic
-	 */
-	public static String getMidFromTopicNameAndType(String aTopicName, String aTopicType){
-		String q = "[{\"mid\":null, \"type\":\"" + aTopicType
-				+ "\", \"name\":\"" + aTopicName + "\"}]";
-		String qs = "query=" + q.replace("\\", "") + "&key=" + key + "&cursor";
-		URLReader ur = new URLReader(scheme, host, path, qs);
-		JSON result = ur.getJSONContents();
-		String topicMid = null;
+public  class FreebaseCredentials {
+	//private static String key = "AIzaSyAyzMNH9hGWG9OxAIV09LvG5tcz2E1o9lY";
+	//private static String key = "AIzaSyB8ouPZ2w1rkMS3bGL6PVNJm6AHLTKFhC4";//old
+	private static String key = "AIzaSyDY0YaK8CcdN24iJ2y1Zsg3Q2O6vBTkZ5s";
+	private final static String scheme = "https";
+	private final static String host = "www.googleapis.com";
+	private final static String path = "/freebase/v1/mqlread";
+	
+	private String retrieveDevKey(){
+		String rm = "";
+		InputStream is =FreebaseCredentials.class.getClassLoader().getResourceAsStream("google_dev_key.txt");
 		try {
-			topicMid = result.get("result").get(0).get("mid").string();
-		} catch (IndexOutOfBoundsException e) {
-			return null;
+			key = IOUtils.toString(is);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		return topicMid;
+		IOUtils.closeQuietly(is);
+		return rm;
+	}
+	
+	
+	
+	/**
+	 * @return the key
+	 */
+	public static String getKey() {
+		return key;
+	}
+	/**
+	 * @return the scheme
+	 */
+	public static String getScheme() {
+		return scheme;
+	}
+	/**
+	 * @return the host
+	 */
+	public static String getHost() {
+		return host;
+	}
+	/**
+	 * @return the path
+	 */
+	public static String getPath() {
+		return path;
 	}
 }

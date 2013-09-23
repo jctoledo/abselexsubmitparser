@@ -22,16 +22,23 @@ package ab.server;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import ab.shared.AptamerBaseSelexSubmitParser;
+import ab.shared.FreebaseChecker;
+import ab.shared.lib.AffinityExperiment;
+import ab.shared.lib.Aptamer;
+import ab.shared.lib.AptamerTarget;
 import ab.shared.lib.Interaction;
+import ab.shared.lib.SelexExperiment;
 
 
 /**
@@ -47,24 +54,77 @@ public class SelexSubmitParser extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+		JSONArray rm = new JSONArray();
 		resp.setContentType("text/json");
 		PrintWriter out = null;
 		try {
 			out = resp.getWriter();
 			String in = req.getParameter("se");
-			if (in.length() != 0) {
-				JSONObject jo = new JSONObject(in);
+			String fn = req.getParameter("fn");
+			if (in.length() != 0 && fn.length() !=0) {
+				JSONObject jo = new JSONObject(in);			
 				AptamerBaseSelexSubmitParser abssp = new AptamerBaseSelexSubmitParser(jo);
-				Interaction i =abssp.getInteractions().get(0);
-				out.println(i.toString());
+				//now convert the AptamerBaseSelexSubmitParser into a write query?
+				SelexExperiment se = abssp.getSelexExperiment();
+				if(se != null){
+					int aPmid = se.getPmid();
+					//now check that the experiment has a pmid
+					if(aPmid > 0){
+						//first check if the PMID exists in freebase 
+						String mid = FreebaseChecker.checkPmid(aPmid);
+						if(mid != null){
+							//now check the interactions
+							List<Interaction> interactions = abssp.getInteractions();
+							for (Interaction anInteraction : interactions) {
+								//verify that each interaction has the following things
+								//an aptamer target
+								AptamerTarget at = anInteraction.getAptamer_target();
+								if(at.getName().length() == 0){
+									out.println("No target name provided. Please check submission :"+ fn);
+								}
+								//some affinityExperiments
+								List<AffinityExperiment> ae_list = anInteraction.getAffinityExperiments();
+								if(ae_list.size() == 0){
+									out.println("No affinity experiments provided. Please check submission : "+ fn);
+								}
+								//check that all aptamers have types
+								List<Aptamer> a_list = anInteraction.getAptamers();
+								if(a_list.size() == 0){
+									out.println("No aptamers provided. Please check submission : "+ fn);
+								}else{
+									for(Aptamer anApt: a_list){
+										if(anApt.getPolymerType().length() == 0){
+											out.println("No polymer type provided. Please check submission: "+ fn);
+										}
+									}
+								}
+							}//for interactions
+							//now that all checks have passed
+							//create a JSON representation of the Selex Experiment / interactions
+							
+						}else{
+							out.println("PMID already in Freebase. Please check submission :"+fn);
+						}
+						
+					}else{
+						out.println("Invalid PMID provided : "+ aPmid + " for file : "+fn);
+					}
+				}
+				
+			}else{
+				out.println("Please provide a selex experiment JSON and a filename using the 'se' and 'fn' parameters respectively");
 			}
-		}
-		catch (JSONException e) {
+		}catch (JSONException e) {
 			out.println("INVALID JSON");
 			out.flush();
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch(NullPointerException e){
+			out.println("INVALID JSON error 2");
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		} 
 	}
+	
+	
 }

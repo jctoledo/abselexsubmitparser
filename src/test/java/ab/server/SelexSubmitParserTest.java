@@ -18,41 +18,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ab.shared.lib;
+package ab.server;
 
+import static org.junit.Assert.*;
 
-import ab.shared.URLReader;
-
-import com.freebase.json.JSON;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * @author  Jose Cruz-Toledo
  *
  */
-public class FreebaseHelper {
-	private static final String key = "AIzaSyB8ouPZ2w1rkMS3bGL6PVNJm6AHLTKFhC4";
-	private static final String scheme = "https";
-	private static final String host = "www.googleapis.com";
-	private static final String path = "/freebase/v1/mqlread";
+public class SelexSubmitParserTest {
 
 	/**
-	 * Retrieve the MID of a given topic given a name and its type. For example passing in "Generic SELEX" and "/base/aptamer/selex_method" will return /m/0clfqg4
-	 * @param aTopicName the name of a topic
-	 * @param aTopicType the type of the topic
-	 * @return the mid of the topic
+	 * @throws java.lang.Exception
 	 */
-	public static String getMidFromTopicNameAndType(String aTopicName, String aTopicType){
-		String q = "[{\"mid\":null, \"type\":\"" + aTopicType
-				+ "\", \"name\":\"" + aTopicName + "\"}]";
-		String qs = "query=" + q.replace("\\", "") + "&key=" + key + "&cursor";
-		URLReader ur = new URLReader(scheme, host, path, qs);
-		JSON result = ur.getJSONContents();
-		String topicMid = null;
-		try {
-			topicMid = result.get("result").get(0).get("mid").string();
-		} catch (IndexOutOfBoundsException e) {
-			return null;
-		}
-		return topicMid;
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
 	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+	}
+
+	@Test
+	public void test() {
+		fail("Not yet implemented");
+	}
+
 }
