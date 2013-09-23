@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+  <!-- Inherit our applications main module.                      -->
+  <inherits name='ab.web' />
+
+  <!-- Specify the path to any remote services.                   -->
+  <servlet path="/web/greet" class="ab.server.GreetingServiceImpl" />
+
+</module>
