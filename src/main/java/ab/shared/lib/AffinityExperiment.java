@@ -22,6 +22,9 @@ package ab.shared.lib;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.codehaus.jettison.json.JSONArray;
+
+import ab.shared.FreebaseHelper;
 
 
 /**
@@ -61,7 +64,7 @@ public class AffinityExperiment {
 	 * 
 	 * @return
 	 */
-	public List<String> makeAMMids() {
+	private List<String> makeAMMids() {
 		List<String> rm = new ArrayList<String>();
 		for (String aName : this.getAffinityMethodsNames()) {
 			if (aName.length() > 0) {
@@ -80,7 +83,7 @@ public class AffinityExperiment {
 	 * 
 	 * @return
 	 */
-	public List<String> makeBAMids(){
+	private List<String> makeBAMids(){
 		List<String> rm = new ArrayList<String>();
 		for(String aName: this.getBuffAgentNames()){
 			if(aName.length()>0){
@@ -120,11 +123,25 @@ public class AffinityExperiment {
 		return affinityMethodsNames;
 	}
 
+	public JSONArray getAffinityMethodsNamesJsonArray(){
+		JSONArray rm = new JSONArray();
+		for(String amn: affinityMethodsNames){
+			rm.put(amn);
+		}
+		return rm;
+	}
 	/**
 	 * @return the affinityMethodsMids
 	 */
 	public List<String> getAffinityMethodsMids() {
 		return affinityMethodsMids;
+	}
+	public JSONArray getAffinityMethodsMidsJsonArray(){
+		JSONArray rm = new JSONArray();
+		for(String amn: affinityMethodsMids){
+			rm.put(amn);
+		}
+		return rm;
 	}
 
 	/**
@@ -133,7 +150,14 @@ public class AffinityExperiment {
 	public List<String> getBuffAgentNames() {
 		return buffAgentNames;
 	}
-
+	public JSONArray getBufferingAgentNamesJsonArray(){
+		JSONArray rm = new JSONArray();
+		for(String amn: buffAgentNames){
+			rm.put(amn);
+		}
+		return rm;
+	}
+	
 	/**
 	 * @return the buffAgentMids
 	 */
@@ -141,6 +165,13 @@ public class AffinityExperiment {
 		return buffAgentMids;
 	}
 
+	public JSONArray getBufferingAgentMidsJsonArray(){
+		JSONArray rm = new JSONArray();
+		for(String amn: buffAgentMids){
+			rm.put(amn);
+		}
+		return rm;
+	}
 	/**
 	 * @return the pH
 	 */
@@ -153,6 +184,13 @@ public class AffinityExperiment {
 	 */
 	public List<String> getMetalCationConcentrations() {
 		return metalCationConcentrations;
+	}
+	public JSONArray getMetalCationConcentrationsJsonArray(){
+		JSONArray rm = new JSONArray();
+		for(String amn: metalCationConcentrations){
+			rm.put(amn);
+		}
+		return rm;
 	}
 
 	/**
