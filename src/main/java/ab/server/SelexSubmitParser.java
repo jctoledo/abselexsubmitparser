@@ -54,13 +54,25 @@ public class SelexSubmitParser extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-		JSONArray rm = new JSONArray();
+		JSONObject rm = new JSONObject();
 		resp.setContentType("text/json");
 		PrintWriter out = null;
+		String in= null;
+		String fn = null;
 		try {
 			out = resp.getWriter();
-			String in = req.getParameter("se");
-			String fn = req.getParameter("fn");
+			try{
+			in = req.getParameter("se");
+			}catch(NullPointerException e){
+				out.println("se parameter not specified!");
+				e.printStackTrace();
+			}
+			try{
+				fn = req.getParameter("fn");
+			}catch(NullPointerException e){
+				out.println("fn parameter not specified!");
+				e.printStackTrace();
+			}
 			if (in.length() != 0 && fn.length() !=0) {
 				JSONObject jo = new JSONObject(in);			
 				AptamerBaseSelexSubmitParser abssp = new AptamerBaseSelexSubmitParser(jo);
@@ -72,7 +84,7 @@ public class SelexSubmitParser extends HttpServlet {
 					if(aPmid > 0){
 						//first check if the PMID exists in freebase 
 						String mid = FreebaseChecker.checkPmid(aPmid);
-						if(mid != null){
+						if(mid == null){
 							//now check the interactions
 							List<Interaction> interactions = abssp.getInteractions();
 							for (Interaction anInteraction : interactions) {
@@ -101,11 +113,12 @@ public class SelexSubmitParser extends HttpServlet {
 							}//for interactions
 							//now that all checks have passed
 							//create a JSON representation of the Selex Experiment / interactions
+							JSONObject se_json =  se.getJSONObject();
+							out.println(se_json.toString());
 							
 						}else{
 							out.println("PMID already in Freebase. Please check submission :"+fn);
 						}
-						
 					}else{
 						out.println("Invalid PMID provided : "+ aPmid + " for file : "+fn);
 					}

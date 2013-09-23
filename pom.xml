@@ -76,11 +76,12 @@
 			<artifactId>google-api-services-freebase</artifactId>
 			<version>v1-rev36-1.15.0-rc</version>
 		</dependency>
-		<dependency>
-			<groupId>com.google.api.client</groupId>
-			<artifactId>google-api-client</artifactId>
-			<version>1.4.1-beta</version>
-		</dependency>
+<dependency>
+  <groupId>com.google.api-client</groupId>
+  <artifactId>google-api-client</artifactId>
+  <version>1.17.0-rc</version>
+  <classifier>rc</classifier>
+</dependency>
 		<dependency>
 			<groupId>org.codehaus.jettison</groupId>
 			<artifactId>jettison</artifactId>
@@ -104,11 +105,11 @@
 			</releases>
 		</repository>
 
-		<repository>
+		<!--<repository>
 			<id>google-releases</id>
 			<name>Google Releases</name>
 			<url>https://oss.sonatype.org/content/repositories/google-releases</url>
-		</repository>
+		</repository>-->
 	</repositories>
 
 	<build>

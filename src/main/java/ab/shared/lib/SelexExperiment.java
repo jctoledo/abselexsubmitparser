@@ -23,7 +23,9 @@ package ab.shared.lib;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONObject;
+import org.codehaus.jettison.json.JSONException;
 
 /**
  * @author Jose Cruz-Toledo
@@ -91,8 +93,6 @@ public class SelexExperiment {
 		this.bufferingAgentMids = makeBAMids();
 	}
 
-
-
 	/**
 	 * @param pmid2
 	 * @param aDoi
@@ -118,7 +118,38 @@ public class SelexExperiment {
 		// TODO Auto-generated constructor stub
 	}
 
-
+	public JSONObject getJSONObject() {
+		// return a JSONObject representation of this object
+		try {
+			JSONObject rm = new JSONObject();
+			// the pmid
+			rm.put("\"pmid\"", this.getPmid());
+			// the selex methods
+			JSONArray s_methods = this.getSelexMethodsNamesJsonArray();
+			if (s_methods != null) {
+				rm.put("\"selex_methods\"", s_methods);
+			}
+			// the partitioning methods
+			JSONArray p_methods = this.getPartitioningMethodsJsonArray();
+			if (p_methods != null) {
+				rm.put("\"partitioning_methods\"", p_methods);
+			}
+			// the recovery mehtods
+			JSONArray r_methods = this.getRecoveryMethodsJsonArray();
+			if (r_methods != null) {
+				rm.put("\"recovery_methods\"", r_methods);
+			}
+			// the selex conditions
+			JSONObject s_conditions = this.getSelexConditionsJsonObject();
+			if (s_conditions != null) {
+				rm.put("\"selex_conditions\"", s_conditions);
+			}
+			return rm;
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	/**
 	 * @return
@@ -205,6 +236,96 @@ public class SelexExperiment {
 	 */
 	public List<String> getSelexMethodsNames() {
 		return selexMethodsNames;
+	}
+
+	public JSONArray getSelexMethodsNamesJsonArray() {
+		List<String> s = this.getSelexMethodsNames();
+		JSONArray rm = new JSONArray();
+		if (s.size() > 0) {
+			for (String aM : s) {
+				rm.put(aM);
+			}
+			return rm;
+		}
+		return null;
+	}
+
+	public JSONArray getPartitioningMethodsJsonArray() {
+		List<String> s = this.getPartitioningMethodsNames();
+		JSONArray rm = new JSONArray();
+		if (s.size() > 0) {
+			for (String aN : s) {
+				rm.put(aN);
+			}
+			return rm;
+		}
+		return null;
+	}
+
+	public JSONArray getRecoveryMethodsJsonArray() {
+		List<String> s = this.getRecoveryMethodsNames();
+		JSONArray rm = new JSONArray();
+		if (s.size() > 0) {
+			for (String aN : s) {
+				rm.put(aN);
+			}
+			return rm;
+		}
+		return null;
+	}
+	public JSONArray getBufferingAgentJsonArray() {
+		List<String> s = this.getBufferingAgentNames();
+		JSONArray rm = new JSONArray();
+		if (s.size() > 0) {
+			for (String aN : s) {
+				rm.put(aN);
+			}
+			return rm;
+		}
+		return null;
+	}
+	public JSONArray getMetalCationJsonArray() {
+		List<String> s = this.getMetalCationConcs();
+		JSONArray rm = new JSONArray();
+		if (s.size() > 0) {
+			for (String aN : s) {
+				rm.put(aN);
+			}
+			return rm;
+		}
+		return null;
+	}
+	
+
+	public JSONObject getSelexConditionsJsonObject() {
+		try {
+			JSONObject rm = new JSONObject();
+			if (this.getSelectionRounds() > 0) {
+				rm.put("\"numOfSelectionRounds\"", this.getSelectionRounds());
+			}
+			if(this.getTemplateSequence().length()>0){
+				rm.put("\"template_sequence\"", this.getTemplateSequence());
+			}
+			if(this.getTemplateBias().length()>0){
+				rm.put("\"template_bias\"", this.getTemplateBias());
+			}
+			if(this.getBufferingAgentJsonArray().length()>0){
+				rm.put("\"buffering_agents\"", this.getBufferingAgentJsonArray());
+			}
+			if(this.getMetalCationJsonArray().length()>0){
+				rm.put("\"metal_cation_concentration\"", this.getMetalCationJsonArray());
+			}
+			if(this.getpH()>0){
+				rm.put("\"ph\"", this.getpH());
+			}
+			if(this.getTemperature()>0){
+				rm.put("\"temperature\"", this.getTemperature());
+			}
+			return rm;			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -317,7 +438,7 @@ public class SelexExperiment {
 				+ ", selectionRounds=" + selectionRounds
 				+ ", templateSequence=" + templateSequence + ", templateBias="
 				+ templateBias + ", temperature=" + temperature + ", pH=" + pH
-				+ ", metalCationConcs=" + metalCationConcs+"]";
+				+ ", metalCationConcs=" + metalCationConcs + "]";
 	}
 
 }

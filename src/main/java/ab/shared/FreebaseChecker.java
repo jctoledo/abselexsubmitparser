@@ -42,7 +42,7 @@ public class FreebaseChecker {
 			root.put("\"mid\"", JSONObject.NULL);
 			root.put("\"type\"", "/base/aptamer/experiment");
 			root.put("\"b:type\"", "/base/aptamer/selex_experiment");
-			root.put("\"/base/aptamer/experiment/pubmed_id\"", aPmid);
+			root.put("\"/base/aptamer/experiment/pubmed_id\"", "\""+aPmid+"\"");
 			q.put(root);
 			String query = q.toString();
 			query = query.replace("\\\"", "");
