@@ -292,6 +292,4 @@ public class Aptamer {
 			return false;
 		return true;
 	}
-
-
 }

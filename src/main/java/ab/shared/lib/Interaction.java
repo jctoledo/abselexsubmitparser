@@ -22,6 +22,9 @@ package ab.shared.lib;
 
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONException;
+
 /**
  * @author  Jose Cruz-Toledo
  *
@@ -37,6 +40,16 @@ public class Interaction {
 		this.aptamers = someApts;
 	}
 	
+	
+	public JSONObject getInteractionJsonObject(){
+		/*try{
+			JSONObject rm = new JSONObject();
+			
+		}catch (JSONException e){
+			e.printStackTrace();
+		}*/
+		return null;
+	}
 
 	/**
 	 * @return the affinityExperiments

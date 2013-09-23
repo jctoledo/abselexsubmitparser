@@ -112,9 +112,11 @@ public class SelexSubmitParser extends HttpServlet {
 								}
 							}//for interactions
 							//now that all checks have passed
-							//create a JSON representation of the Selex Experiment / interactions
+							//create a JSON representation of the Selex Experiment
 							JSONObject se_json =  se.getJSONObject();
 							out.println(se_json.toString());
+							//create a JSON representation of the interactions
+							JSONObject ints_json = interactions.getJSONObject()
 							
 						}else{
 							out.println("PMID already in Freebase. Please check submission :"+fn);
