@@ -23,7 +23,11 @@ package ab.shared.lib;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONObject;
+import org.codehaus.jettison.json.JSONException;
 
+import ab.shared.FreebaseHelper;
 
 /**
  * @author Jose Cruz-Toledo
@@ -38,7 +42,6 @@ public class Aptamer {
 	private List<String> secondaryStructureMids;
 	private String application;
 	private String mutationalAnalysis;
-	
 
 	public Aptamer(String aPolymerType, String aSeq, String someModResidues,
 			String seqPatt, List<String> someSSNames, String anAppli,
@@ -68,6 +71,38 @@ public class Aptamer {
 			}
 		}
 		return rm;
+	}
+
+	public JSONObject getJSONObject() {
+		try {
+			JSONObject rm = new JSONObject();
+			rm.put("\"polymer_type\"", this.getPolymerType());
+			rm.put("\"sequence\"", this.getSequence());
+			if (this.getModifiedResidues().length() > 0) {
+				rm.put("\"modified_residues\"", this.getModifiedResidues());
+			}
+			if (this.getSequencePattern().length() > 0) {
+				rm.put("\"sequence_pattern\"", this.getSequencePattern());
+			}
+			if (this.getSecondaryStructureMidsJsonArray().length() > 0) {
+				rm.put("\"secondary_structures_mids\"",
+						this.getSecondaryStructureMids());
+			}
+			if (this.getSecondaryStructureNamesJsonArray().length() > 0) {
+				rm.put("\"secondary_structures_names\"",
+						this.getSecondaryStructureNamesJsonArray());
+			}
+			if(this.getApplication().length()>0){
+				rm.put("\"application\"", this.getApplication());
+			}
+			if(this.getMutationalAnalysis().length()>0){
+				rm.put("\"mutational_analysis\"", this.getMutationalAnalysis());
+			}
+			return rm;
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -137,6 +172,18 @@ public class Aptamer {
 		return secondaryStructureNames;
 	}
 
+	public JSONArray getSecondaryStructureNamesJsonArray() {
+		List<String> s = this.getSecondaryStructureNames();
+		JSONArray rm = new JSONArray();
+		if (s.size() > 0) {
+			for (String aN : s) {
+				rm.put(aN);
+			}
+			return rm;
+		}
+		return null;
+	}
+
 	/**
 	 * @param secondaryStructureNames
 	 *            the secondaryStructureNames to set
@@ -150,6 +197,18 @@ public class Aptamer {
 	 */
 	public List<String> getSecondaryStructureMids() {
 		return secondaryStructureMids;
+	}
+
+	public JSONArray getSecondaryStructureMidsJsonArray() {
+		List<String> s = this.getSecondaryStructureMids();
+		JSONArray rm = new JSONArray();
+		if (s.size() > 0) {
+			for (String aN : s) {
+				rm.put(aN);
+			}
+			return rm;
+		}
+		return null;
 	}
 
 	/**
@@ -190,7 +249,9 @@ public class Aptamer {
 		this.mutationalAnalysis = mutationalAnalysis;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -204,7 +265,9 @@ public class Aptamer {
 				+ mutationalAnalysis + "]";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -237,7 +300,9 @@ public class Aptamer {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
