@@ -20,35 +20,133 @@
  */
 package ab.shared.lib;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
-import org.json.JSONException;
+import org.codehaus.jettison.json.JSONException;
 
 /**
- * @author  Jose Cruz-Toledo
- *
+ * @author Jose Cruz-Toledo
+ * 
  */
 public class Interaction {
 	private List<AffinityExperiment> affinityExperiments;
 	private List<Aptamer> aptamers;
 	private AptamerTarget aptamer_target;
-	
-	public Interaction(List<AffinityExperiment> someAffExps, List<Aptamer> someApts, AptamerTarget anAptTarget){
+
+	public Interaction(List<AffinityExperiment> someAffExps,
+			List<Aptamer> someApts, AptamerTarget anAptTarget) {
 		this.affinityExperiments = someAffExps;
 		this.aptamer_target = anAptTarget;
 		this.aptamers = someApts;
 	}
-	
-	
-	public JSONObject getInteractionJsonObject(){
-		/*try{
-			JSONObject rm = new JSONObject();
-			
-		}catch (JSONException e){
-			e.printStackTrace();
-		}*/
-		return null;
+
+	public JSONObject getJSONObject() throws JSONException {
+		JSONObject rm = new JSONObject();
+		// get the aptamer target
+		if (this.getAptamer_target() != null) {
+			JSONObject at = new JSONObject();
+			at.put("\"name\"", this.getAptamer_target().getName());
+			if (this.getAptamer_target().getName().length() > 0) {
+				at.put("\"mid\"", this.getAptamer_target().getMid());
+			}
+			rm.put("aptamer_target", at);
+		} else {
+			throw new JSONException("No target specified! errorno 43200");
+		}
+		// get the affinity experiment details
+		List<AffinityExperiment> ae_list = this.getAffinityExperiments();
+		if (ae_list.size() > 0) {
+			JSONArray ae_arr = new JSONArray();
+			for (AffinityExperiment ae : ae_list) {
+				JSONObject a = new JSONObject();
+				if (ae.getAffinityMethodsNamesJsonArray().length() > 0) {
+					a.put("\"affinity_methods_names\"",
+							ae.getAffinityMethodsNamesJsonArray());
+				}
+				if (ae.getBufferingAgentMidsJsonArray().length() > 0) {
+					a.put("\"affinity_methods_mids\"",
+							ae.getAffinityMethodsMidsJsonArray());
+				}
+				if (ae.getKd() > 0) {
+					a.put("\"kd\"", ae.getKd());
+				}
+				if (ae.getKdError() != null && ae.getKdError().length() > 0) {
+					a.put("\"kd_error\"", ae.getKdError());
+				}
+				if (ae.getKdRange() != null && ae.getKdRange().length() > 0) {
+					a.put("\"kd_range\"", ae.getKdRange());
+				}
+				if (ae.getMetalCationConcentrationsJsonArray() != null
+						&& ae.getMetalCationConcentrationsJsonArray().length() > 0) {
+					a.put("ae_metal_cation_concs",
+							ae.getMetalCationConcentrationsJsonArray());
+				}
+				if (ae.getpH() != null && ae.getpH() > 0) {
+					a.put("\"ph\"", ae.getpH());
+				}
+				if (ae.getTemperature() != null && ae.getTemperature() > 0) {
+					a.put("\"temperature\"", ae.getTemperature());
+				}
+				ae_arr.put(a);
+				rm.put("\"affinity_experiments\"", ae_arr);
+			}
+		} else {
+			throw new JSONException(
+					"No affinity experiments specified!! errno 43431");
+		}
+		// now the aptamers
+		List<Aptamer> ap_list = this.getAptamers();
+		JSONArray aptamers = new JSONArray();
+		for (Aptamer anApt : ap_list) {
+			aptamers.put(anApt.getJSONObject());
+		}
+		rm.put("\"aptamers\"", aptamers);
+
+		return rm;
+	}
+
+	/**
+	 * Searches the aptamer list for all instances of minimal aptamers and
+	 * returns a map where the key is an aptamer and the value are any minimal
+	 * aptamers derived from it
+	 * 
+	 * @param someAptamers
+	 *            a list of aptamers that may contain minimal aptamers
+	 * @return a map where the key is an aptamer and the value is a list of
+	 *         minimal aptamers derived from it
+	 */
+	private Map<Aptamer, List<MinimalAptamer>> findMinimalAptamers(
+			List<Aptamer> someAptamers) {
+		HashMap<Aptamer, List<MinimalAptamer>> rm = new HashMap<Aptamer, List<MinimalAptamer>>();
+		// first find all the minimal aptamers
+		for (Aptamer anApt : someAptamers) {
+			if (anApt instanceof MinimalAptamer) {
+				MinimalAptamer ma = (MinimalAptamer) anApt;
+				// find the parent aptamer in someApts
+				for (Aptamer aParent : someAptamers) {
+					if (!aParent.equals(ma)) {
+						if (ma.getParent().equals(aParent)) {
+							// found a parent
+							if (rm.containsKey(aParent)) {
+								// get the list and add one at the end
+								rm.get(aParent).add(ma);
+							} else {
+								// create a list and add it at key
+								ArrayList<MinimalAptamer> al = new ArrayList<MinimalAptamer>();
+								al.add(ma);
+								rm.put(aParent, al);
+							}
+						}
+					}
+				}
+			}
+		}
+		return rm;
 	}
 
 	/**
@@ -72,8 +170,9 @@ public class Interaction {
 		return aptamer_target;
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -82,7 +181,5 @@ public class Interaction {
 				+ ", aptamers=" + aptamers + ", aptamer_target="
 				+ aptamer_target + "]";
 	}
-	
-	
 
 }

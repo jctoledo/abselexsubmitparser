@@ -137,8 +137,13 @@ public class AptamerBaseSelexSubmitParser {
 			JSONObject jo2 = new JSONObject(pageTwo);
 			// get the selex methods
 			List<String> selexMethodNames = new LinkedList<String>();
-			Iterator<String> sel_methodsItr = jo2.getJSONObject("selexMethod")
+			Iterator<String> sel_methodsItr = null;
+			try{
+				sel_methodsItr = jo2.getJSONObject("selexMethod")
 					.keys();
+			}catch(JSONException e){
+				return null;
+			}
 			while (sel_methodsItr.hasNext()) {
 				String sm = sel_methodsItr.next();
 				if (!sm.equals("Not Described")) {
@@ -226,20 +231,29 @@ public class AptamerBaseSelexSubmitParser {
 				List<Aptamer> aptaList = new LinkedList<Aptamer>();
 				List<AffinityExperiment> affList = new LinkedList<AffinityExperiment>();
 				if (anInteractionNum.length() < 2) {
+					Integer numOfAptamers = null;
+					String aptamerType = null;
+					Integer numOfAffExperiments = null;
+					String targetName = null;
+					try{
 					// get the number of aptamers for this interaction
-					Integer numOfAptamers = Integer.parseInt((String) idpt
+					 numOfAptamers = Integer.parseInt((String) idpt
 							.getJSONObject(anInteractionNum).get(
 									"numberOfAptamers"));
-					String aptamerType = (String) idpt.getJSONObject(
+					 aptamerType = (String) idpt.getJSONObject(
 							anInteractionNum).get("aptamerType");
 					// get the number of affinity experiments for this
 					// interaction
-					Integer numOfAffExperiments = Integer
+					 numOfAffExperiments = Integer
 							.parseInt((String) idpt.getJSONObject(
 									anInteractionNum).getString(
 									"numberOfAffinityExperiments"));
-					String targetName = idpt.getJSONObject(anInteractionNum)
+					 targetName = idpt.getJSONObject(anInteractionNum)
 							.getString("targetN");
+					}catch(JSONException e){
+						e.printStackTrace();
+						return null;
+					}
 					AptamerTarget at = new AptamerTarget(targetName);
 
 					// iterate over the aptamers for interaction

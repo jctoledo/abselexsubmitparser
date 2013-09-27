@@ -78,24 +78,24 @@ public class Aptamer {
 			JSONObject rm = new JSONObject();
 			rm.put("\"polymer_type\"", this.getPolymerType());
 			rm.put("\"sequence\"", this.getSequence());
-			if (this.getModifiedResidues().length() > 0) {
+			if (this.getModifiedResidues()!=null&&this.getModifiedResidues().length() > 0) {
 				rm.put("\"modified_residues\"", this.getModifiedResidues());
 			}
-			if (this.getSequencePattern().length() > 0) {
+			if (this.getSequencePattern()!=null&&this.getSequencePattern().length() > 0) {
 				rm.put("\"sequence_pattern\"", this.getSequencePattern());
 			}
-			if (this.getSecondaryStructureMidsJsonArray().length() > 0) {
+			if (this.getSecondaryStructureMidsJsonArray()!=null&&this.getSecondaryStructureMidsJsonArray().length() > 0) {
 				rm.put("\"secondary_structures_mids\"",
 						this.getSecondaryStructureMids());
 			}
-			if (this.getSecondaryStructureNamesJsonArray().length() > 0) {
+			if (this.getSecondaryStructureNamesJsonArray() != null &&this.getSecondaryStructureNamesJsonArray().length() > 0) {
 				rm.put("\"secondary_structures_names\"",
 						this.getSecondaryStructureNamesJsonArray());
 			}
-			if(this.getApplication().length()>0){
+			if(this.getApplication() != null&& this.getApplication().length()>0){
 				rm.put("\"application\"", this.getApplication());
 			}
-			if(this.getMutationalAnalysis().length()>0){
+			if(this.getMutationalAnalysis() != null && this.getMutationalAnalysis().length()>0){
 				rm.put("\"mutational_analysis\"", this.getMutationalAnalysis());
 			}
 			return rm;

@@ -188,7 +188,9 @@ public class AffinityExperiment {
 	public JSONArray getMetalCationConcentrationsJsonArray(){
 		JSONArray rm = new JSONArray();
 		for(String amn: metalCationConcentrations){
+			if(amn.length()>0){
 			rm.put(amn);
+			}
 		}
 		return rm;
 	}

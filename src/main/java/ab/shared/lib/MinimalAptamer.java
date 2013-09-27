@@ -45,6 +45,10 @@ public class MinimalAptamer extends Aptamer{
 		parent = aParent;
 	}
 	
+	public Aptamer getParent(){
+		return this.parent;
+	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
