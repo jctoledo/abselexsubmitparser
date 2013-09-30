@@ -92,6 +92,9 @@ public class Interaction {
 				if (ae.getTemperature() != null && ae.getTemperature() > 0) {
 					a.put("\"temperature\"", ae.getTemperature());
 				}
+				if(ae.getBufferingAgentNamesJsonArray().length()>0){
+					a.put("\"buffering_agents_names\"", ae.getBufferingAgentNamesJsonArray());
+				}
 				ae_arr.put(a);
 				rm.put("\"affinity_experiments\"", ae_arr);
 			}

@@ -165,6 +165,7 @@ public class AffinityExperiment {
 		return buffAgentMids;
 	}
 
+	
 	public JSONArray getBufferingAgentMidsJsonArray(){
 		JSONArray rm = new JSONArray();
 		for(String amn: buffAgentMids){
