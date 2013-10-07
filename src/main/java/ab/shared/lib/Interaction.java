@@ -51,7 +51,7 @@ public class Interaction {
 		if (this.getAptamer_target() != null) {
 			JSONObject at = new JSONObject();
 			at.put("\"name\"", this.getAptamer_target().getName());
-			if (this.getAptamer_target().getName().length() > 0) {
+			if (this.getAptamer_target().getMid().length() > 0) {
 				at.put("\"mid\"", this.getAptamer_target().getMid());
 			}
 			rm.put("aptamer_target", at);
