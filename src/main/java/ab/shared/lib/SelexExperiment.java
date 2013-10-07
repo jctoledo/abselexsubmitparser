@@ -128,6 +128,14 @@ public class SelexExperiment {
 			if (this.getPmid() > 0) {
 				rm.put("\"pmid\"", this.getPmid());
 			}
+			//the doi
+			if(this.getDoi().length()>0){
+				rm.put("\"doi\"", this.getDoi());
+			}
+			//the reference
+			if(this.getReference().length()>0){
+				rm.put("\"reference\"", this.getReference());
+			}
 			// the selex methods
 			JSONArray s_methods = this.getSelexMethodsNamesJsonArray();
 			if (s_methods != null) {
