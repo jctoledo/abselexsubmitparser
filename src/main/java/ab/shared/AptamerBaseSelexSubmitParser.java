@@ -77,7 +77,6 @@ public class AptamerBaseSelexSubmitParser {
 				pageMap.get(4));
 		selexExperiment = makeSelexExperiment(pageMap.get(1), pageMap.get(2));
 	}
-
 	
 	@SuppressWarnings("unchecked")
 	public AptamerBaseSelexSubmitParser(File anInputFile) {
@@ -106,8 +105,6 @@ public class AptamerBaseSelexSubmitParser {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		// se = makeSelexExperiment(pageMap.get("1"), pageMap.get("2"));
-		// System.out.println
 		interactions = makeInteractions(pageMap.get(2), pageMap.get(3),
 				pageMap.get(4));
 		selexExperiment = makeSelexExperiment(pageMap.get(1), pageMap.get(2));
@@ -373,6 +370,8 @@ public class AptamerBaseSelexSubmitParser {
 			}
 			// now chekc out whats on page 4
 			JSONObject jo4 = new JSONObject(pageFour);
+			//System.out.println(jo4);
+			
 			JSONObject minAptDets = null;
 			try {
 				minAptDets = jo4.getJSONObject("additional_dets");
