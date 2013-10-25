@@ -125,6 +125,13 @@ public class SelexSubmitParser extends HttpServlet {
 					}else{
 						out.println("Invalid PMID provided : "+ aPmid + " for file : "+fn);
 					}
+				}else{
+					//no PMID so check that there is a doi or a reference
+					String doi = se.getDoi();
+					String ref = se.getReference();
+					if(doi != null){
+						
+					}
 				}
 				
 			}else{

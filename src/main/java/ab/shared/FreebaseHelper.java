@@ -66,6 +66,74 @@ public class FreebaseHelper {
 			return null;
 		}
 	}
+	/**
+	 * Query Freebase and retrieve the mid of the selex experiment topic that has the passed in doi
+	 * @param aDoi a document object identifier
+	 * @return if a doi is found the topic's mid is returned. Null otherwise
+	 */
+	public static String checkDoi(String aDoi){
+		JSONArray q = new JSONArray();
+		JSONObject root = new JSONObject();
+		try{
+			root.put("\"mid\"", JSONObject.NULL);
+			root.put("\"type\"", "/base/aptamer/experiment");
+			root.put("\"b:type\"", "/base/aptamer/selex_experiment");
+			root.put("\"/base/aptamer/experiment/digital_object_identifier\"", "\""+aDoi+"\"");
+			q.put(root);
+			String query = q.toString();
+			query = query.replace("\\\"", "");
+			query = query.replace("\\\\", "");
+			query = query.replace("\\/", "/");
+			URLReader ur = new URLReader(FreebaseCredentials.getScheme(),
+					FreebaseCredentials.getHost(), FreebaseCredentials.getPath(),
+					query, FreebaseCredentials.getKey());
+			JSONObject rc = ur.getJSON();
+			JSONArray r = rc.getJSONArray("result");
+			if(r.length() == 0){
+				return null;
+			}else{
+				String s = r.getJSONObject(0).getString("mid");
+				return s;
+			}
+		}catch (JSONException e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * Query Freebase and retrieve the mid of the selex experiment topic that has the passed in reference string
+	 * @param aRef a reference string
+	 * @return if a a reference is found the topic's mid is returned. Null otherwise
+	 */
+	public static String checkReference(String aRef){
+		JSONArray q = new JSONArray();
+		JSONObject root = new JSONObject();
+		try{
+			root.put("\"mid\"", JSONObject.NULL);
+			root.put("\"type\"", "/base/aptamer/experiment");
+			root.put("\"b:type\"", "/base/aptamer/selex_experiment");
+			root.put("\"/base/aptamer/experiment/has_bibliographic_reference\"", "\""+aRef+"\"");
+			q.put(root);
+			String query = q.toString();
+			query = query.replace("\\\"", "");
+			query = query.replace("\\\\", "");
+			query = query.replace("\\/", "/");
+			URLReader ur = new URLReader(FreebaseCredentials.getScheme(),
+					FreebaseCredentials.getHost(), FreebaseCredentials.getPath(),
+					query, FreebaseCredentials.getKey());
+			JSONObject rc = ur.getJSON();
+			JSONArray r = rc.getJSONArray("result");
+			if(r.length() == 0){
+				return null;
+			}else{
+				String s = r.getJSONObject(0).getString("mid");
+				return s;
+			}
+		}catch (JSONException e){
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 	/**
 	 * Retrieve the MID of a given topic given a name and its type. For example passing in "Generic SELEX" and "/base/aptamer/selex_method" will return /m/0clfqg4

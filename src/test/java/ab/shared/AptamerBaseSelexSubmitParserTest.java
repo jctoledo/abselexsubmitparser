@@ -68,7 +68,7 @@ public class AptamerBaseSelexSubmitParserTest {
 	public void test() throws IOException {
 		 absp = new AptamerBaseSelexSubmitParser(testJson);
 		
-		System.out.println(testJson);
+		System.out.println(absp);
 		
 		//fail("Not yet implemented");
 	}
